@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 6080481063004084262}
   - component: {fileID: 307061875135202834}
   - component: {fileID: 4823992913727683503}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,7 +167,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &4823992913727683503
 MonoBehaviour:
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 8446365678292003249}
   - component: {fileID: 7372361108401097037}
   - component: {fileID: 8537595741059282743}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,4 +295,7 @@ MonoBehaviour:
     type: 3}
   orangePortalPrefab: {fileID: 2328925681452508170, guid: 1da275163547b8f41999a494e09483b3,
     type: 3}
+  layer:
+    serializedVersion: 2
+    m_Bits: 119
   pivot: {fileID: 8446365678292003249}

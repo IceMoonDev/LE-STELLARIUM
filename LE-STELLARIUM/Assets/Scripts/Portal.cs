@@ -3,43 +3,66 @@ using UnityEngine;
 public class Portal : MonoBehaviour
 {
     public bool isOrange;
-
-    // Le mot-clé "static" signifie que cette variable est partagée par TOUS les portails.
     private static float prochainTeleportPossible = 0f;
-
-    // Le temps d'attente avant de pouvoir reprendre un portail (en secondes)
     public float tempsCooldown = 0.2f;
+
+    void Start()
+    {
+        // On remet le compteur à zéro à chaque fois qu'on lance le jeu !
+        prochainTeleportPossible = 0f;
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // 1. On vérifie si le cooldown est terminé.
-        // Si ce n'est pas le cas, on arrête tout de suite la fonction.
-        if (Time.time < prochainTeleportPossible)
+        // On garde ton if qui fonctionne !
+        if (other.CompareTag("Player") || other.CompareTag("Box"))
         {
-            return;
-        }
+            Debug.Log("ÉTAPE 1 : Le joueur a le bon Tag et est entré.");
 
-        // 2. Trouver le portail de destination
-        GameObject destinationPortal;
+            // Vérification du cooldown
+            if (Time.time < prochainTeleportPossible)
+            {
+                Debug.Log("ÉTAPE 2 :  BLOQUÉ PAR LE COOLDOWN !");
+                return;
+            }
 
-        if (isOrange == false) // Si c'est le bleu
-        {
-            destinationPortal = GameObject.FindGameObjectWithTag("orange portal");
-        }
-        else // Si c'est le orange
-        {
-            destinationPortal = GameObject.FindGameObjectWithTag("blue portal");
-        }
+            // Recherche du portail
+            GameObject destinationPortal;
+            if (isOrange == false)
+            {
+                destinationPortal = GameObject.FindGameObjectWithTag("orange portal");
+            }
+            else
+            {
+                destinationPortal = GameObject.FindGameObjectWithTag("blue portal");
+            }
 
-        // 3. Téléporter et activer le cooldown
-        if (destinationPortal != null)
-        {
-            // On téléporte le joueur
-            other.transform.position = destinationPortal.transform.position;
+            // Résultat de la recherche et téléportation
+            if (destinationPortal != null)
+            {
+                Debug.Log("ÉTAPE 3 :  Portail de destination TROUVÉ ! Téléportation en cours...");
 
-            // On met à jour l'horloge : la prochaine téléportation ne sera possible
-            // que dans 0.2 secondes, pour TOUS les portails.
-            prochainTeleportPossible = Time.time + tempsCooldown;
+                // On cherche si l'objet a un composant physique (Rigidbody2D)
+                Rigidbody2D rb = other.GetComponent<Rigidbody2D>();
+
+                if (rb != null)
+                {
+                    // Si oui, on téléporte le composant physique !
+                    rb.position = destinationPortal.transform.position;
+                    // Facultatif : on peut aussi stopper sa vitesse pour éviter qu'il ne s'envole en sortant
+                    // rb.linearVelocity = Vector2.zero;
+                }
+                else
+                {
+                    // Si c'est un objet sans physique, on téléporte le Transform normalement
+                    other.transform.position = destinationPortal.transform.position;
+                }
+
+                prochainTeleportPossible = Time.time + tempsCooldown;
+            }
+            {
+                Debug.Log("ÉTAPE 3 : ❌ ERREUR - Portail de destination INTROUVABLE. Vérifie que l'autre portail existe et a exactement le tag recherché.");
+            }
         }
     }
 }
